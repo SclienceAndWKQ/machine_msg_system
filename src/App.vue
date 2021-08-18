@@ -6,9 +6,28 @@
 </template>
 
 <script>
+
+import {getAllProvince} from '@/api/address'
+
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      data: []
+    }
+  },
+  methods: {
+    click_getAllProvince() {
+      getAllProvince.then(resp => {
+        console.log(resp.data);
+      }).catch(error => {
+        console.log(error);
+      });
+    }
+  }
 }
+
+
 </script>
 
 <style>

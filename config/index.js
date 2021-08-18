@@ -8,19 +8,49 @@ module.exports = {
   dev: {
 
     // Paths
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    proxyTable: {},
-
+    // env: require('dev.env'),//使用config/dev.env.js中定义的编译环境
+    assetsSubDirectory: 'static',//编译输出的二级目录
+    assetsPublicPath: './',//编译发布的根目录,可配置为资源服务器域名或CDN域名
+    productionSourceMap: false,
+    proxyTable: { //需要proxyTable代理的接口(可跨域)
+      '/api': {
+        target: 'http://localhost:7896',//本地测试环境请求后台接口的域名
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''//这里理解成用'/api'代替target里面的地址,后面组件中我们掉接口时直接用api代替,
+          // eg: 'http://localhost:7896/bdc/chinaPlace/getAllTownshipByFather'可直接使用'api/bdc/chinaPlace/getAllTownshipByFather'代替
+        }
+      },
+      '/socket': {
+        target: 'http://localhost:7896',
+        changeOrigin: true,
+        ws: true,
+        secure: false,
+        pathRewrite: {
+          '^/socket': ''
+        }
+      }
+    },
+/*    configureWebpack: {
+      extensions: ['.js','.json','.vue'],
+      alias: {
+        '@': resolve('src'),
+        public: resolve('public'),
+        components: resolve('src/components'),
+        util: resolve('src/utils'),
+        store: resolve('src/store'),
+        router: resolve('src/router')
+      }
+    },*/
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: false,
+    autoOpenBrowser: false,//运行时是否自动开启浏览器
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    
+
     /**
      * Source Maps
      */
@@ -34,6 +64,8 @@ module.exports = {
     cacheBusting: true,
 
     cssSourceMap: true
+
+
   },
 
   build: {
